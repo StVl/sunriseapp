@@ -17,7 +17,7 @@ SITE = pathlib.Path(__file__).resolve().parent.parent / "site" / "index.html"
 # Latest GitHub release asset named exactly "Sunrise.dmg" (see scripts/release.sh).
 DOWNLOAD_URL = os.environ.get("DOWNLOAD_URL", "https://github.com/StVl/sunriseapp/releases/latest/download/Sunrise.dmg")
 # Polar → Products → Sunrise → Checkout Links. Empty = leave the button as is.
-BUY_URL = os.environ.get("BUY_URL", "")
+BUY_URL = os.environ.get("BUY_URL", "https://buy.polar.sh/polar_cl_QdDOIQeErSAshNIub87iwSeOFJ9ZlLc9HgSXb3alJIp")
 
 # placeholder href in the export → URL
 LINKS = {
