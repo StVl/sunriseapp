@@ -19,6 +19,11 @@ DOWNLOAD_URL = os.environ.get("DOWNLOAD_URL", "https://github.com/StVl/sunriseap
 # Polar → Products → Sunrise → Checkout Links. Empty = leave the button as is.
 BUY_URL = os.environ.get("BUY_URL", "https://buy.polar.sh/polar_cl_QdDOIQeErSAshNIub87iwSeOFJ9ZlLc9HgSXb3alJIp")
 
+# Price shown on the Purchase button (must match the Polar product).
+PRICE = os.environ.get("PRICE", "$7")
+# Prices the design may carry that get replaced with PRICE.
+DESIGN_PRICES = ["$9.99"]
+
 # placeholder href in the export → URL
 LINKS = {
     "#download": DOWNLOAD_URL,
@@ -38,6 +43,11 @@ def main() -> int:
         if count:
             html = html.replace(old, new)
             changed.append(f"{placeholder} → {url} ({count}×)")
+    for old_price in DESIGN_PRICES:
+        count = html.count(f">{old_price}<")
+        if count and old_price != PRICE:
+            html = html.replace(f">{old_price}<", f">{PRICE}<")
+            changed.append(f"price {old_price} → {PRICE} ({count}×)")
     SITE.write_text(html, encoding="utf-8")
     for line in changed:
         print(line)
