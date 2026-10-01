@@ -24,6 +24,10 @@ PRICE = os.environ.get("PRICE", "$7")
 # Prices the design may carry that get replaced with PRICE.
 DESIGN_PRICES = ["$9.99"]
 
+# Tab icon (site/favicon.png, site/apple-touch-icon.png). The bundle swaps in its template's
+# <head> on load, so the tags go into both the outer head and the template.
+ICON_TAGS = '<link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">'
+
 # placeholder href in the export → URL
 LINKS = {
     "#download": DOWNLOAD_URL,
@@ -48,6 +52,14 @@ def main() -> int:
         if count and old_price != PRICE:
             html = html.replace(f">{old_price}<", f">{PRICE}<")
             changed.append(f"price {old_price} → {PRICE} ({count}×)")
+    if 'href="favicon.png"' not in html:
+        html = html.replace("<head>\n", "<head>\n  " + ICON_TAGS + "\n", 1)
+        changed.append("favicon → outer <head>")
+    escaped = ICON_TAGS.replace('"', '\\"')
+    template_head = '<head>\\n<meta charset=\\"utf-8\\">'
+    if escaped not in html and template_head in html:
+        html = html.replace(template_head, template_head + escaped, 1)
+        changed.append("favicon → template <head>")
     SITE.write_text(html, encoding="utf-8")
     for line in changed:
         print(line)
